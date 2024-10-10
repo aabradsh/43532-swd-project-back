@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
 
-
 const app = express();
 const PORT = 4000;
 
@@ -34,7 +33,6 @@ app.get('/api/hello', async (req, res) => {
 app.use('/api/notifications', notificationsRoutes);  // This will handle all notification-related routes
 
 // Port of our server
-const PORT = 4000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // login for authentication
