@@ -1,34 +1,29 @@
-const Notification = require('../models/Notification');
+const Notification = require('../models/Notifications');
 
-// Get notifications for a specific user (based on their userId)
-exports.getNotifications = async (req, res) => {
-    try {
-        // Assuming user ID is available from the request (JWT token, for example)
-        const notifications = await Notification.find({ userId: req.user._id }).sort({ createdAt: -1 });
-        res.status(200).json(notifications);
-    } catch (error) {
-        res.status(500).json({ message: 'Error fetching notifications' });
-    }
+// Hardcoded notifications (for now)
+const notifications = [
+  { id: 1, userId: 1, message: 'You have been assigned to the Hackathon.', type: 'event', isRead: false, createdAt: new Date('2024-09-01') },
+  { id: 2, userId: 1, message: 'The Hackathon has been rescheduled.', type: 'update', isRead: false, createdAt: new Date('2024-09-10') },
+  { id: 3, userId: 2, message: 'Reminder: Hackathon is tomorrow.', type: 'reminder', isRead: false, createdAt: new Date('2024-09-20') }
+];
+
+
+// Fetch notifications for a specific user
+exports.getNotifications = (req, res) => {
+  const userId = 1;  // Hardcoded for now
+  const userNotifications = notifications.filter(n => n.userId === userId);
+  res.json(userNotifications);
 };
 
-// (Optional) Create a notification (for example, when a task is assigned to the user)
-exports.createNotification = async (req, res) => {
-    const { userId, message, type } = req.body;
-    try {
-        const notification = new Notification({ userId, message, type });
-        await notification.save();
-        res.status(201).json(notification);
-    } catch (error) {
-        res.status(500).json({ message: 'Error creating notification' });
-    }
-};
-
-// (Optional) Mark a notification as read
-exports.markAsRead = async (req, res) => {
-    try {
-        const notification = await Notification.findByIdAndUpdate(req.params.id, { isRead: true }, { new: true });
-        res.status(200).json(notification);
-    } catch (error) {
-        res.status(500).json({ message: 'Error marking notification as read' });
-    }
+// Allows notifications to be left at read to let user know if they have seen it already
+exports.markAsRead = (req, res) => {
+  const notificationId = req.params.id;
+  const notification = notifications.find(n => n.id == notificationId);
+  
+  if (notification) {
+    notification.isRead = true;
+    res.json(notification);
+  } else {
+    res.status(404).json({ message: 'Notification not found' });
+  }
 };

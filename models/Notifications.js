@@ -1,12 +1,13 @@
-const mongoose = require('mongoose');
-
-const notificationSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    message: { type: String, required: true },
-    type: { type: String, required: true },  // 'event', 'update', 'reminder', etc.
-    isRead: { type: Boolean, default: false },
-    createdAt: { type: Date, default: Date.now }
-});
-
-const Notification = mongoose.model('Notification', notificationSchema);
-module.exports = Notification;
+// got rid of the mongoDB stuff since we don't need it for this assignment
+class Notification {
+    constructor(id, userId, message, type, isRead) {
+      this.id = id;
+      this.userId = userId;
+      this.message = message;
+      this.type = type;  // 'event', 'reminder', 'update'
+      this.isRead = isRead || false;  // default to unread
+    }
+  }
+  
+  module.exports = Notification;
+  
