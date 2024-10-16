@@ -114,8 +114,9 @@ const validatePassword = (password) => {
         errors.push('Password must contain at least one special character');
     }
 
-    return errors;
+    return errors;  
 };
+
 
 
 
@@ -124,64 +125,52 @@ app.post('/api/register', (req, res) => {
     const { email, password } = req.body;
     const users = readUsersFromFile();
 
-
-    // error if email already in use with existing account
+    // check if the user already exists
     const existingUser = users.find(user => user.email === email);
-    
     if (existingUser) {
         return res.status(409).json({ error: 'User already exists' });
     }
 
-
-    // error if email is typed incorrectly
+    // check if the email is valid
     if (!isValidEmail(email)) {
-        return res.status(400).json({ error: 'Invalid email'});
+        return res.status(400).json({ error: 'Invalid email' });
     }
 
-
-    // password validation
+    // validate password
     const passwordErrors = validatePassword(password);
-
     if (passwordErrors.length > 0) {
         return res.status(400).json({ errors: passwordErrors });
     }
 
-
-
-    users.push({ email, password});
+    // save the user
+    users.push({ email, password });
     writeUsersToFile(users);
-    res.status(201).json({ message: 'Thank you for registering! You may now login to view your account information.' });
+    res.status(201).json({ message: 'Thank you for registering! You may now log in to view your account information.' });
 });
+
 
 
 // login endpoint
-app.post('/api/register', (req, res) => {
+app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
     const users = readUsersFromFile();
 
-    if (!isValidEmail(email)) {
-        return res.status(400).json({ error: 'Invalid email format' });
-    }
-
-    const passwordErrors = validatePassword(password);
-    if (passwordErrors.length > 0) {
-        return res.status(400).json({ errors: passwordErrors });
-    }
-
+    // find the user by email
     const existingUser = users.find(user => user.email === email);
     
-    if (existingUser) {
-        return res.status(409).json({ error: 'User already exists' });
+    // check if user exists
+    if (!existingUser) {
+        return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    users.push({ email, password });
-    writeUsersToFile(users);
-    res.status(201).json({ message: 'Thank you for registering! You may now login to view your account information.' });
+    // check if password matches
+    if (existingUser.password !== password) {
+        return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // successful login
+    res.status(200).json({ message: 'Login successful', user: { email: existingUser.email } });
 });
-
-
-
-
 
 
 
