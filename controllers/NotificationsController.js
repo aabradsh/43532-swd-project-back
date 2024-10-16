@@ -1,12 +1,4 @@
-const Notification = require('../models/Notifications');
-
-// Hardcoded notifications (for now)
-const notifications = [
-  { id: 1, userId: 1, message: 'You have been assigned to the Hackathon.', type: 'event', isRead: false, createdAt: new Date('2024-09-01') },
-  { id: 2, userId: 1, message: 'The Hackathon has been rescheduled.', type: 'update', isRead: false, createdAt: new Date('2024-09-10') },
-  { id: 3, userId: 2, message: 'Reminder: Hackathon is tomorrow.', type: 'reminder', isRead: false, createdAt: new Date('2024-09-20') }
-];
-
+const notification = require('../models/Notifications');
 
 // Fetch notifications for a specific user
 exports.getNotifications = (req, res) => {
