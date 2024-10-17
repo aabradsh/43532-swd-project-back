@@ -1,4 +1,4 @@
-// server.test.js
+// unit testing
 const request = require('supertest');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -14,16 +14,16 @@ app.use(cors({ origin: 'http://localhost:3000' }));
 
 const usersFilePath = path.join(__dirname, 'users.json');
 
-// Mock readUsersFromFile function
+// mock readUsersFromFile function
 const readUsersFromFile = jest.fn();
 const writeUserToFile = jest.fn();
 
-// Mock user data
+// mock user data
 const mockUsers = [
   { email: 'test@example.com', password: 'password123' },
 ];
 
-// Setup the login route
+// setup the login route
 app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
   const users = readUsersFromFile();
@@ -36,7 +36,7 @@ app.post('/api/login', (req, res) => {
   res.status(200).json({ message: 'Login successful', user: { email: existingUser.email } });
 });
 
-// Tests for login
+// tests for login
 describe('POST /api/login', () => {
   beforeEach(() => {
     readUsersFromFile.mockReturnValue(mockUsers);
@@ -77,34 +77,34 @@ describe('POST /api/login', () => {
   });
 });
 
-// Mock user data for registration
+// mock user data for registration
 let mockData = [];
 
-// Setup the registration route
+// setup the registration route
 app.post('/api/register', (req, res) => {
   const { email, password } = req.body;
 
-  // Check for missing email or password
+  // check for missing email or password
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password are required' });
   }
 
   const users = readUsersFromFile();
 
-  // Check for existing user
+  // check for existing user
   const existingUser = users.find(user => user.email === email);
   if (existingUser) {
     return res.status(400).json({ error: 'Email already registered' });
   }
 
-  // Simulate writing the user to the file
+  // simulate writing the user to the file
   mockData.push({ email, password });
   writeUserToFile(mockData);
 
   res.status(201).json({ message: 'Registration successful' });
 });
 
-// Tests for registration
+// tests for registration
 describe('POST /api/register', () => {
   beforeEach(() => {
     readUsersFromFile.mockReturnValue(mockData);
@@ -112,7 +112,7 @@ describe('POST /api/register', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
-    mockData = [];  // Reset mock users after each test
+    mockData = [];  // reset mock users after each test
   });
 
   it('should return 201 and success message for valid registration', async () => {
@@ -126,13 +126,12 @@ describe('POST /api/register', () => {
   });
 
   it('should return 400 for duplicate email registration', async () => {
-    // First register the user
     await request(app).post('/api/register').send({
       email: 'duplicate@example.com',
       password: 'password123',
     });
 
-    // Attempt to register the same user again
+    // attempt to register the same user again
     const response = await request(app).post('/api/register').send({
       email: 'duplicate@example.com',
       password: 'password123',
