@@ -7,6 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const NotificationsRoutes = require('./routes/NotificationsRoutes');
 const VolunteerMatchingRoutes = require('./routes/VolunteerMatchingRoutes');
+const EventManagementRoutes = require('./routes/EventManagementRoutes');
 
 const app = express();
 const PORT = 4000;
@@ -19,6 +20,7 @@ app.use(cors({ origin: 'http://localhost:3000' }));
 // Registering routes
 app.use('/api/notifications', NotificationsRoutes);  // This will handle all notification-related routes
 app.use('/api', VolunteerMatchingRoutes);
+app.use('/api', EventManagementRoutes);
 
 // Port of our server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
