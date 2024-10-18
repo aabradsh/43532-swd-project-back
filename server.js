@@ -11,6 +11,7 @@ const VolunteerMatchingRoutes = require('./routes/VolunteerMatchingRoutes');
 const app = express();
 const PORT = 4000;
 
+
 app.use(express.json());
 app.use(cors({ origin: 'http://localhost:3000' }));  
 
@@ -45,7 +46,7 @@ const readUsersFromFile = () => {
         return JSON.parse(data);
     } catch (error) {
         console.error("Error reading users file: ", error);
-        return [];
+        return [];  
     }
 };
 
@@ -154,6 +155,27 @@ app.post('/api/login', (req, res) => {
     // successful login
     res.status(200).json({ message: 'Login successful', user: { email: existingUser.email } });
 });
+
+// profile management
+app.post('/api/profile', (req, res) => {
+    const { email, profile } = req.body; // assume email and profile data are sent in the request body
+    const users = readUsersFromFile();
+  
+    // find the user by email
+    const userIndex = users.findIndex((user) => user.email === email);
+    if (userIndex === -1) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+  
+    users[userIndex].profile = profile;
+  
+    writeUsersToFile(users);
+  
+    return res.status(200).json({ message: 'Profile updated successfully!' });
+      
+      
+});
+  
 
 
 
