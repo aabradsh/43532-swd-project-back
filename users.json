@@ -1,6 +1,29 @@
 [
   {
-    "email": "abbytnt4@gmail.com",
+    "email": "volunteer@gmail.com",
     "password": "#Tennis123"
+  },
+  {
+    "email": "admin@gmail.com",
+    "password": "#Soccer123"
+  },
+  {
+    "email": "abby@gmail.com",
+    "password": "#Soccer123",
+    "profile": {
+      "fullName": "Abigail Anne Bradshaw",
+      "address1": "6706 Greenvale Lane",
+      "address2": "",
+      "city": "Houston",
+      "state": "TX",
+      "zip": "77066",
+      "skills": [
+        "Design"
+      ],
+      "preferences": "",
+      "availability": [
+        null
+      ]
+    }
   }
 ]
