@@ -1,5 +1,4 @@
-const Event = require('../models/eventModel');
-const { validateEvent } = require('../utils/validateEvent');
+const Event = require('../models/EventManagement');
 
 // Get all events
 const getAllEvents = (req, res) => {
@@ -9,18 +8,12 @@ const getAllEvents = (req, res) => {
 
 // Create a new event
 const createEvent = (req, res) => {
-  const { error } = validateEvent(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
-
   const newEvent = Event.create(req.body);
   res.status(201).json(newEvent);
 };
 
 // Update an existing event
 const updateEvent = (req, res) => {
-  const { error } = validateEvent(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
-
   const updatedEvent = Event.update(req.params.id, req.body);
   if (!updatedEvent) return res.status(404).json({ message: 'Event not found' });
 
