@@ -24,9 +24,10 @@ class Event {
 */
 
 const volunteers = [
-    { id: 1, name: 'Jerry Smith', skills: ['Cybersecurity', 'Event Planning'], location: 'Austin', availability: 'Full-time' },
-    { id: 2, name: 'Rick Sanchez', skills: ['Software Design', 'Organizing'], location: 'Dallas', availability: 'Part-time' },
-    { id: 3, name: 'Morty Smith', skills: ['Computer Engineering', 'Leadership'], location: 'Houston', availability: 'Part-time' }
+    { id: 1, name: 'Jerry Smith', admin: false, skills: ['Cybersecurity', 'Event Planning'], location: 'Austin', availability: 'Full-time', events: ['Hackathon'] },
+    { id: 2, name: 'Rick Sanchez', admin: true, skills: ['Software Design', 'Organizing'], location: 'Dallas', availability: 'Part-time', events: ['Workshop'] },
+    { id: 3, name: 'Morty Smith', admin: false, skills: ['Computer Engineering', 'Leadership'], location: 'Houston', availability: 'Part-time', events: ['Hackathon', 'Career Fair']}
+     
   ];
   
 const events = [
@@ -35,4 +36,5 @@ const events = [
     { id: 3, name: 'Career Fair', requiredSkills: ['Organizing', 'Teamwork'], location: 'Houston', urgency: 'Medium', details: 'Career Fair for Computer Science Majors' }
   ];
 
-module.exports = display;
+
+module.exports = {volunteers, events};

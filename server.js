@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
 const NotificationsRoutes = require('./routes/NotificationsRoutes');
+const VolunteerHistoryRoutes = require('./routes/VolunteerHistoryRoutes');
 const VolunteerMatchingRoutes = require('./routes/VolunteerMatchingRoutes');
 
 const app = express();
@@ -18,22 +19,23 @@ app.use(cors({ origin: 'http://localhost:3000' }));
 
 // Registering routes
 app.use('/api/notifications', NotificationsRoutes);  // This will handle all notification-related routes
-app.use('/api', VolunteerMatchingRoutes);
+app.use('/api/volunteerHistory', VolunteerHistoryRoutes);
+app.use('/api/volunteer-matching', VolunteerMatchingRoutes);
 
 // Port of our server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 
-// login for authentication
-// app.post('/login', (req, res) => {
-//     const { email, password } = req.body;
+//login for authentication
+app.post('/login', (req, res) => {
+     const { email, password } = req.body;
 
-//     if (email == 'test@example.com' && password === 'password123') {
-//         return res.status(200).json({ message: 'Login successful' });
-//     }
+     if (email == 'test@example.com' && password === 'password123') {
+         return res.status(200).json({ message: 'Login successful' });
+     }
 
-//     return res.status(401).json({ error: 'Invalid credentials'});
-// });
+    return res.status(401).json({ error: 'Invalid credentials'});
+});
 
 
 // users information
