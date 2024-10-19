@@ -25,5 +25,9 @@
         null
       ]
     }
+  },
+  {
+    "email": "testing12@gmail.com",
+    "password": "Testing$1"
   }
 ]
