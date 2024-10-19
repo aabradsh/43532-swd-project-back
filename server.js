@@ -232,7 +232,7 @@ const readEvents = () => {
 
 // Writing events to the JSON file
 const writeEvents = (events) => {
-    fs.writeFile(eventsFilePath, JSON.stringify(events, null, 2), (err) => {
+    fs.writeFileSync(eventsFilePath, JSON.stringify(events, null, 2), (err) => {
         if (err) {
             console.error('Error writing events', err);
         } else {
@@ -276,7 +276,7 @@ app.post('/events', (req, res) => {
     events.push(newEvent);
     writeEvents(events);
 
-    res.status(201).json({ message: 'Event created successfully', event: newEvent });
+    res.status(201).json({ message: 'Event created successfully'});
 });
 
 // Retreiving all events
