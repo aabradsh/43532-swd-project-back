@@ -1,9 +1,10 @@
-const notification = require('../models/Notifications');
+const notifications = require('../models/Notifications');
 
 // Fetch notifications for a specific user
 exports.getNotifications = (req, res) => {
-  const userId = 1;  // Hardcoded for now
+  const userId = req.user.userId;  
   const userNotifications = notifications.filter(n => n.userId === userId);
+  console.log("User ID: " + userId);
   res.json(userNotifications);
 };
 

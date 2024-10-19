@@ -1,9 +1,12 @@
 const {volunteers, events} = require('../models/VolunteerHistory');
 
 exports.getEvents = (req, res)=> {
-    const { volunteerId } = req.query;
+
+
+    const volunteerId = req.user.userId;
     const volunteer = volunteers.find(v => v.id === parseInt(volunteerId));
 
+    console.log("Volunteer ID: " + volunteerId);
 
     if (!volunteer) {
         return res.status(404).json({ message: 'Volunteer not found' });

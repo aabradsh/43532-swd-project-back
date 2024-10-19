@@ -4,6 +4,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const fs = require('fs');
+const JWT_SECRET = "not-strong-secret";
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const path = require('path');
 const NotificationsRoutes = require('./routes/NotificationsRoutes');
 const VolunteerHistoryRoutes = require('./routes/VolunteerHistoryRoutes');
@@ -16,6 +19,33 @@ const PORT = 4000;
 app.use(express.json());
 app.use(cors({ origin: 'http://localhost:3000' }));  
 
+const authenticateJWT = (req, res, next) => {
+    //const token = req.header('Authorization').split(' ')[1]; // Bearer token
+    const authHeader = req.header('Authorization'); 
+
+    console.log(authHeader);
+    console.log(typeof authHeader);
+    if(!authHeader) {
+        return next();
+    }
+    const token = authHeader.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ message: 'Authentication failed' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        console.log(decoded);
+        req.user = decoded;
+        console.log("decoded: " + decoded);
+        next();
+    } catch (err) {
+        return res.status(401).json({ message: 'Invalid token' });
+    }
+};
+
+app.use(authenticateJWT);
 
 // Registering routes
 app.use('/api/notifications', NotificationsRoutes);  // This will handle all notification-related routes
@@ -27,15 +57,16 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 
 //login for authentication
-app.post('/login', (req, res) => {
-     const { email, password } = req.body;
+// app.post('/login', (req, res) => {
+//      const { email, password } = req.body;
 
-     if (email == 'test@example.com' && password === 'password123') {
-         return res.status(200).json({ message: 'Login successful' });
-     }
+//      if (email == 'test@example.com' && password === 'password123') {
+//          return res.status(200).json({ message: 'Login successful' });
+//      }
 
-    return res.status(401).json({ error: 'Invalid credentials'});
-});
+//     return res.status(401).json({ error: 'Invalid credentials'});
+// });
+
 
 
 // users information
@@ -155,7 +186,8 @@ app.post('/api/login', (req, res) => {
     }
 
     // successful login
-    res.status(200).json({ message: 'Login successful', user: { email: existingUser.email } });
+    const token = jwt.sign({ userId: existingUser.userId }, JWT_SECRET, { expiresIn: '1h' });
+    res.status(200).json({ message: 'Login successful', user: { email: existingUser.email }, token: token });
 });
 
 // profile management

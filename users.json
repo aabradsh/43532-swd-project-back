@@ -1,13 +1,16 @@
 [
   {
+    "userId": 4,
     "email": "volunteer@gmail.com",
     "password": "#Tennis123"
   },
   {
+    "userId": 3,
     "email": "admin@gmail.com",
     "password": "#Soccer123"
   },
   {
+    "userId": 1,
     "email": "abby@gmail.com",
     "password": "#Soccer123",
     "profile": {
@@ -25,5 +28,10 @@
         null
       ]
     }
+  },
+  {
+    "userId": 3,
+    "email": "belac6426@gmail.com",
+    "password": "Butts64!"
   }
 ]
