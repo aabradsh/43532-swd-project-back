@@ -1,29 +1,30 @@
 [
   {
-    "email": "volunteer@gmail.com",
-    "password": "#Tennis123"
-  },
-  {
-    "email": "admin@gmail.com",
-    "password": "#Soccer123"
-  },
-  {
-    "email": "abby@gmail.com",
-    "password": "#Soccer123",
+    "email": "admin@example.com",
+    "password": "#Tennis123",
     "profile": {
-      "fullName": "Abigail Anne Bradshaw",
-      "address1": "6706 Greenvale Lane",
+      "fullName": "John Doe",
+      "address1": "1234 Sample Blvd",
       "address2": "",
       "city": "Houston",
       "state": "TX",
-      "zip": "77066",
+      "zip": "11234",
       "skills": [
-        "Design"
+        "Design",
+        "Coding"
       ],
       "preferences": "",
       "availability": [
         null
       ]
     }
+  },
+  {
+    "email": "abby@gmail.com",
+    "password": "#Read123"
+  },
+  {
+    "email": "example@example.com",
+    "password": "#Read123"
   }
 ]
