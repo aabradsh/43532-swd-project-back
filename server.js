@@ -210,12 +210,61 @@ app.post('/api/profile', (req, res) => {
       
       
 });
-  
 
 
+/*Alex- Event Management*/
 
+// Storing event data
+const eventsFilePath = path.join(__dirname, 'events.json');
 
+// Reading events 
+const readEvents = () => {
+    try {
+        const data = fs.readFileSync(eventsFilePath, 'utf-8');
+        return JSON.parse(data || '[]'); // Return an empty array if the file is empty
+    } catch (error) {
+        console.error('Error reading events', error);
+        return [];
+    }
+};
 
+// Writing events to the JSON file
+const writeEvents = (events) => {
+    try {
+        fs.writeFileSync(eventsFilePath, JSON.stringify(events, null, 2));
+    } catch (error) {
+        console.error('Error writing events', error);
+    }
+};
 
+// Creating new events
+app.post('/events', (req, res) => {
+    const { name, date, location, description } = req.body;
 
+    // Validation
+    if (!name || !date || !location) {
+        return res.status(400).json({ error: 'Name, date, and location are required' });
+    }
 
+    // Create a new event
+    const newEvent = {
+        id: Date.now(),
+        name,
+        date,
+        location,
+        description,
+    };
+
+    // Read events, add a new event, and save back to the JSON file
+    const events = readEvents();
+    events.push(newEvent);
+    writeEvents(events);
+
+    res.status(201).json({ message: 'Event created successfully', event: newEvent });
+});
+
+// Retreiving all events
+app.get('/events', (req, res) => {
+    const events = readEvents();
+    res.json(events);
+});
