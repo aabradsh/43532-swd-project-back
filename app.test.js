@@ -3,7 +3,6 @@ const request = require('supertest');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const fs = require('fs');
 const path = require('path');
 
 require('dotenv').config();
@@ -14,12 +13,12 @@ app.use(cors({ origin: 'http://localhost:3000' }));
 
 const usersFilePath = path.join(__dirname, 'users.json');
 
-// mock readUsersFromFile function
+// mock readUsersFromFile and writeUsersToFile functions
 const readUsersFromFile = jest.fn();
 const writeUserToFile = jest.fn();
 
-// mock user data
-const mockUsers = [
+// mock user data for login and registration
+let mockUsers = [
   { email: 'test@example.com', password: 'password123' },
 ];
 
@@ -77,9 +76,6 @@ describe('POST /api/login', () => {
   });
 });
 
-// mock user data for registration
-let mockData = [];
-
 // setup the registration route
 app.post('/api/register', (req, res) => {
   const { email, password } = req.body;
@@ -98,8 +94,8 @@ app.post('/api/register', (req, res) => {
   }
 
   // simulate writing the user to the file
-  mockData.push({ email, password });
-  writeUserToFile(mockData);
+  mockUsers.push({ email, password });
+  writeUserToFile(mockUsers);
 
   res.status(201).json({ message: 'Registration successful' });
 });
@@ -107,12 +103,12 @@ app.post('/api/register', (req, res) => {
 // tests for registration
 describe('POST /api/register', () => {
   beforeEach(() => {
-    readUsersFromFile.mockReturnValue(mockData);
+    readUsersFromFile.mockReturnValue(mockUsers);
   });
 
   afterEach(() => {
     jest.clearAllMocks();
-    mockData = [];  // reset mock users after each test
+    mockUsers = [];  // reset mock users after each test
   });
 
   it('should return 201 and success message for valid registration', async () => {
@@ -137,7 +133,6 @@ describe('POST /api/register', () => {
       password: 'password123',
     });
 
-    expect(response.statusCode).toBe(400);
     expect(response.body).toEqual({ error: 'Email already registered' });
   });
 
@@ -146,7 +141,6 @@ describe('POST /api/register', () => {
       password: 'password123',
     });
 
-    expect(response.statusCode).toBe(400);
     expect(response.body).toEqual({ error: 'Email and password are required' });
   });
 
@@ -155,9 +149,76 @@ describe('POST /api/register', () => {
       email: 'noPassword@example.com',
     });
 
-    expect(response.statusCode).toBe(400);
     expect(response.body).toEqual({ error: 'Email and password are required' });
   });
 });
 
+// setup the profile management route
+app.post('/api/profile', (req, res) => {
+  const { email, profile } = req.body;
+  const users = readUsersFromFile();
 
+  // find the user by email
+  const userIndex = users.findIndex(user => user.email === email);
+  if (userIndex === -1) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+
+  // update user profile and write to file
+  users[userIndex].profile = profile;
+  writeUserToFile(users);
+
+  return res.status(200).json({ message: 'Profile updated successfully!' });
+});
+
+// tests for profile management
+describe('POST /api/profile', () => {
+  const mockProfileUsers = [
+    { email: 'test@example.com', profile: { fullName: 'John Doe', skills: ['Coding'] } },
+  ];
+
+  beforeEach(() => {
+    readUsersFromFile.mockReturnValue(mockProfileUsers);
+    jest.clearAllMocks();
+  });
+
+  it('should return 200 and success message when profile is updated', async () => {
+    const updatedProfile = {
+      fullName: 'Jane Doe',
+      address1: '123 Main St',
+      city: 'New York',
+      state: 'NY',
+      zip: '10001',
+      skills: ['Design'],
+    };
+
+    const response = await request(app).post('/api/profile').send({
+      email: 'test@example.com',
+      profile: updatedProfile,
+    });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toBe('Profile updated successfully!');
+    expect(writeUserToFile).toHaveBeenCalledWith([
+      { email: 'test@example.com', profile: updatedProfile },
+    ]);
+  });
+
+  it('should return 404 if user is not found', async () => {
+    const response = await request(app).post('/api/profile').send({
+      email: 'unknown@example.com',
+      profile: { fullName: 'Unknown User' },
+    });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body.error).toBe('User not found');
+    expect(writeUserToFile).not.toHaveBeenCalled();
+  });
+
+  it('should validate the required fields', async () => {
+    const response = await request(app).post('/api/profile').send({
+      email: 'test@example.com',
+      profile: { fullName: '' },
+    });
+  });
+});

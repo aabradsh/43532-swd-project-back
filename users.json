@@ -14,18 +14,20 @@
     "email": "abby@gmail.com",
     "password": "#Soccer123",
     "profile": {
-      "fullName": "Abigail Anne Bradshaw",
-      "address1": "6706 Greenvale Lane",
+      "fullName": "John Doe",
+      "address1": "1234 Example Blvd",
       "address2": "",
       "city": "Houston",
       "state": "TX",
-      "zip": "77066",
+      "zip": "11234",
       "skills": [
-        "Design"
+        "Design",
+        "Coding"
       ],
       "preferences": "",
       "availability": [
-        null
+        "2024-10-21T05:00:00.000Z",
+        "2024-10-22T05:00:00.000Z"
       ]
     }
   },
