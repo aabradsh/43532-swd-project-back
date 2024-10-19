@@ -1,7 +1,18 @@
 [
   {
-    "email": "admin@example.com",
-    "password": "#Tennis123",
+    "userId": 4,
+    "email": "volunteer@gmail.com",
+    "password": "#Tennis123"
+  },
+  {
+    "userId": 3,
+    "email": "admin@gmail.com",
+    "password": "#Soccer123"
+  },
+  {
+    "userId": 1,
+    "email": "abby@gmail.com",
+    "password": "#Soccer123",
     "profile": {
       "fullName": "John Doe",
       "address1": "1234 Example Blvd",
@@ -19,5 +30,10 @@
         "2024-10-22T05:00:00.000Z"
       ]
     }
+  },
+  {
+    "userId": 3,
+    "email": "belac6426@gmail.com",
+    "password": "Butts64!"
   }
 ]
