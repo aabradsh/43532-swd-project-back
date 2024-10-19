@@ -241,9 +241,8 @@ const writeEvents = (events) => {
 app.post('/events', (req, res) => {
     const { name, date, location, description } = req.body;
 
-    // Validation
     if (!name || !date || !location) {
-        return res.status(400).json({ error: 'Name, date, and location are required' });
+        return res.status(400).json({ error: 'Event name, date, and location are required' });
     }
 
     // Create a new event
@@ -254,6 +253,19 @@ app.post('/events', (req, res) => {
         location,
         description,
     };
+
+    //Validating data
+    const validateEvent = (event) => {
+        const errors = [];
+        if (!event.name || event.name.trim() === '') errors.push('Event name is required');
+        if (!event.date || isNaN(Date.parse(event.date))) errors.push('Invalid or missing date');
+        else if (new Date(event.date) < new Date()) errors.push('Event date must be in the future');
+        if (!event.location || event.location.trim() === '') errors.push('Event location is required');
+        if (event.description && event.description.length > 500) {
+            errors.push('Event description cannot exceed 500 characters');
+        }
+        return errors;
+    }
 
     // Read events, add a new event, and save back to the JSON file
     const events = readEvents();
@@ -268,3 +280,4 @@ app.get('/events', (req, res) => {
     const events = readEvents();
     res.json(events);
 });
+
