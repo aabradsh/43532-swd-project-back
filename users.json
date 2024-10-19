@@ -4,7 +4,7 @@
     "password": "#Tennis123",
     "profile": {
       "fullName": "John Doe",
-      "address1": "1234 Sample Blvd",
+      "address1": "1234 Example Blvd",
       "address2": "",
       "city": "Houston",
       "state": "TX",
@@ -15,16 +15,9 @@
       ],
       "preferences": "",
       "availability": [
-        null
+        "2024-10-21T05:00:00.000Z",
+        "2024-10-22T05:00:00.000Z"
       ]
     }
-  },
-  {
-    "email": "abby@gmail.com",
-    "password": "#Read123"
-  },
-  {
-    "email": "example@example.com",
-    "password": "#Read123"
   }
 ]
