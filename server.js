@@ -11,6 +11,7 @@ const path = require('path');
 const NotificationsRoutes = require('./routes/NotificationsRoutes');
 const VolunteerHistoryRoutes = require('./routes/VolunteerHistoryRoutes');
 const VolunteerMatchingRoutes = require('./routes/VolunteerMatchingRoutes');
+const EventManagementRoutes = require('./routes/EventManagementRoutes');
 
 const app = express();
 const PORT = 4000;
