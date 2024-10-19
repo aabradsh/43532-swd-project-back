@@ -52,6 +52,7 @@ app.use(authenticateJWT);
 app.use('/api/notifications', NotificationsRoutes);  // This will handle all notification-related routes
 app.use('/api/volunteerHistory', VolunteerHistoryRoutes);
 app.use('/api/volunteer-matching', VolunteerMatchingRoutes);
+app.use('/api/match', VolunteerMatchingRoutes)
 
 // Port of our server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
