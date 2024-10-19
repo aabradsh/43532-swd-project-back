@@ -214,6 +214,8 @@ app.post('/api/profile', (req, res) => {
 
 /*Alex- Event Management*/
 
+app.use(bodyParser.json());
+
 // Storing event data
 const eventsFilePath = path.join(__dirname, 'events.json');
 
@@ -230,11 +232,13 @@ const readEvents = () => {
 
 // Writing events to the JSON file
 const writeEvents = (events) => {
-    try {
-        fs.writeFileSync(eventsFilePath, JSON.stringify(events, null, 2));
-    } catch (error) {
-        console.error('Error writing events', error);
-    }
+    fs.writeFile(eventsFilePath, JSON.stringify(events, null, 2), (err) => {
+        if (err) {
+            console.error('Error writing events', err);
+        } else {
+            console.log('Events written successfully');
+        }
+    });
 };
 
 // Creating new events
