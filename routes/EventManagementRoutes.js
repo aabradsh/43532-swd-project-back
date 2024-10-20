@@ -1,11 +1,9 @@
 const express = require('express');
-const { 
-    getAllEvents, 
-    createEvent, 
-    updateEvent, 
-    deleteEvent 
-} = require('../controllers/EventsController');
 const router = express.Router();
+
+//const {getAllEvents, createEvent, updateEvent, deleteEvent } = require('../controllers/EventsController');
+
+const {createEvent, deleteEvent, getAllEvents, updateEvent} = require("../controllers/EventsController");
 
 // Routes for Event Management
 router.get('/', getAllEvents); // See all events

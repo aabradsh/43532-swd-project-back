@@ -18,13 +18,13 @@ const PORT = 4000;
 
 
 app.use(express.json());
-app.use(cors({ origin: 'http://localhost:3000' }));  
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 const authenticateJWT = (req, res, next) => {
     //const token = req.header('Authorization').split(' ')[1]; // Bearer token
-    const authHeader = req.header('Authorization'); 
-
-    console.log(authHeader);
+    const authHeader = req.header('Authorization');
+console.log('authenticate');
+    console.log("header:" + authHeader);
     console.log(typeof authHeader);
     if(!authHeader) {
         return next();
@@ -52,7 +52,7 @@ app.use(authenticateJWT);
 app.use('/api/notifications', NotificationsRoutes);  // This will handle all notification-related routes
 app.use('/api/volunteerHistory', VolunteerHistoryRoutes);
 app.use('/api/volunteer-matching', VolunteerMatchingRoutes);
-app.use('/api/match', VolunteerMatchingRoutes)
+app.use('/api/eventmanagement', EventManagementRoutes);
 
 // Port of our server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
@@ -81,7 +81,7 @@ const readUsersFromFile = () => {
         return JSON.parse(data);
     } catch (error) {
         console.error("Error reading users file: ", error);
-        return [];  
+        return [];
     }
 };
 
@@ -133,7 +133,7 @@ const validatePassword = (password) => {
         errors.push('Password must contain at least one special character');
     }
 
-    return errors;  
+    return errors;
 };
 
 
@@ -176,7 +176,7 @@ app.post('/api/login', (req, res) => {
 
     // find the user by email
     const existingUser = users.find(user => user.email === email);
-    
+
     // check if user exists
     if (!existingUser) {
         return res.status(401).json({ error: 'Invalid email or password' });
@@ -189,6 +189,7 @@ app.post('/api/login', (req, res) => {
 
     // successful login
     const token = jwt.sign({ userId: existingUser.userId }, JWT_SECRET, { expiresIn: '1h' });
+    console.log('token='+token);
     res.status(200).json({ message: 'Login successful', user: { email: existingUser.email }, token: token });
 });
 
@@ -196,20 +197,20 @@ app.post('/api/login', (req, res) => {
 app.post('/api/profile', (req, res) => {
     const { email, profile } = req.body; // assume email and profile data are sent in the request body
     const users = readUsersFromFile();
-  
+
     // find the user by email
     const userIndex = users.findIndex((user) => user.email === email);
     if (userIndex === -1) {
       return res.status(404).json({ error: 'User not found' });
     }
-  
+
     users[userIndex].profile = profile;
-  
+
     writeUsersToFile(users);
-  
+
     return res.status(200).json({ message: 'Profile updated successfully!' });
-      
-      
+
+
 });
 
 
@@ -224,7 +225,7 @@ if (!fs.existsSync(eventsFilePath)) {
     console.error('Error: events.json not found');
 }
 
-// Reading events 
+// Reading events
 const readEvents = () => {
     try {
         const data = fs.readFileSync(eventsFilePath, 'utf-8');
@@ -290,4 +291,3 @@ app.get('/events', (req, res) => {
     const events = readEvents();
     res.json(events);
 });
-
