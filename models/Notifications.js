@@ -12,7 +12,7 @@ class Notification {
 */  
 // Hard code data for now
 const notifications = [
-    { id: 1, userId: 1, message: 'You have been assigned to the Hackathon.', type: 'event', isRead: false, createdAt: new Date('2024-09-01') },
+    { id: 1, userId: 1, message: 'You have been assigned to the Hackathon.', type: 'event', isRead: true, createdAt: new Date('2024-09-01') },
     { id: 2, userId: 1, message: 'The Hackathon has been rescheduled.', type: 'update', isRead: false, createdAt: new Date('2024-09-10') },
     { id: 3, userId: 2, message: 'Reminder: Hackathon is tomorrow.', type: 'reminder', isRead: false, createdAt: new Date('2024-09-20') }
   ];

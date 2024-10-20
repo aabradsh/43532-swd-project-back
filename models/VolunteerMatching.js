@@ -25,9 +25,9 @@ class Event {
 
 // Example volunteer data
 const volunteers = [
-    { id: 1, name: 'Jerry Smith', skills: ['Cybersecurity', 'Event Planning'], location: 'Austin', availability: 'Full-time' },
-    { id: 2, name: 'Rick Sanchez', skills: ['Software Design', 'Organizing'], location: 'Dallas', availability: 'Part-time' },
-    { id: 3, name: 'Morty Smith', skills: ['Computer Engineering', 'Leadership'], location: 'Houston', availability: 'Part-time' }
+    { id: 1, userID: 1, name: 'Jerry Smith', skills: ['Cybersecurity', 'Event Planning'], location: 'Austin', availability: 'Full-time' },
+    { id: 2, userID: 2, name: 'Rick Sanchez', skills: ['Software Design', 'Organizing'], location: 'Dallas', availability: 'Part-time' },
+    { id: 3, userID: 3, name: 'Morty Smith', skills: ['Computer Engineering', 'Teamwork', 'Cybersecurity', 'Software Design'], location: 'Houston', availability: 'Part-time' }
   ];
   
 // Example events data

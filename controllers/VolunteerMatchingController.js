@@ -9,14 +9,19 @@ exports.matchVolunteersToEvents = (req, res) => {
     return res.status(404).json({ message: 'Volunteer not found' });
   }
 
-  // Match events based on location and required skills
-  const matchedEvents = events.filter(event =>
-    event.location === volunteer.location &&
-    event.requiredSkills.some(skill => volunteer.skills.includes(skill))
-  );
+  // Calculate a similarity score based on matching skills
+  const matchedEvents = events.map(event => {
+    const matchingSkills = event.requiredSkills.filter(skill => volunteer.skills.includes(skill));
+    return {
+      ...event,
+      matchScore: matchingSkills.length // Number of matching skills
+    };
+  });
 
-  // For simplicity, return the first match as the best match
-  const bestMatch = matchedEvents[0];
+  // Sort events by highest matchScore and select the best match
+  matchedEvents.sort((a, b) => b.matchScore - a.matchScore);
+  const bestMatch = matchedEvents[0].matchScore > 0 ? matchedEvents[0] : null;
+
   res.json(bestMatch ? [bestMatch] : []);
 };
 
