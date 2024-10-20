@@ -23,8 +23,6 @@ const authenticateJWT = (req, res, next) => {
     //const token = req.header('Authorization').split(' ')[1]; // Bearer token
     const authHeader = req.header('Authorization'); 
 
-    console.log(authHeader);
-    console.log(typeof authHeader);
     if(!authHeader) {
         return next();
     }
