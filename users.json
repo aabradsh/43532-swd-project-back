@@ -35,5 +35,29 @@
     "userId": 3,
     "email": "belac6426@gmail.com",
     "password": "Butts64!"
+  },
+  {
+    "userId": 3,
+    "email": "carbo6426@gmail.com",
+    "password": "Monkey3!",
+    "profile": {
+      "fullName": "Caleb Lopez",
+      "address1": "1234 Monkey ln",
+      "address2": "apt 2303",
+      "city": "houston",
+      "state": "TX",
+      "zip": "77087",
+      "skills": [
+        "Design",
+        "Writing",
+        "Management",
+        "Marketing",
+        "Coding"
+      ],
+      "preferences": "",
+      "availability": [
+        "2024-09-19T05:00:00.000Z"
+      ]
+    }
   }
 ]
