@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const profileSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: 'User', required: false }, // reference to user doc by unique id
-    fullName: { type: String, maxlength: 100 }, 
+    firstName: { type: String, maxlength: 100 }, 
+    lastName: { type: String, maxlength: 100 }, 
     address1: { type: String, maxlength: 100 }, 
     address2: { type: String, maxlength: 100 }, 
     city: { type: String, maxlength: 100 }, 
