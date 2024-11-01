@@ -35,10 +35,13 @@ mongoose.connect(connectionString)
 
 const LoginRoutes = require('./routes/LoginRoutes');
 const RegisterRoutes = require('./routes/RegisterRoutes');
+const ProfileRoutes = require('./routes/ProfileRoutes');
 
 
 app.use('/login', LoginRoutes);
 app.use('/register', RegisterRoutes);
+app.use('/profile', ProfileRoutes);
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 // const authenticateJWT = (req, res, next) => {
