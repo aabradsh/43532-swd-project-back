@@ -1,32 +1,34 @@
 const express = require('express');
 const router = express.Router();
-const Profile = require('./models/Profile');
-const User = require('./models/User');
+const Profile = require('../models/Profile');
+const User = require('../models/User');
 
 router.post('/', async (req, res) => {
-  const { userId, fullName, address1, address2, city, state, zip, skills, preferences, availability } = req.body;
+  const { userId, firstName, lastName, address1, address2, city, state, zip, skills, preferences, availability } = req.body;
 
   console.log('Received profile update request:', req.body); 
 
   try {
+    // check if user exists
     const user = await User.findById(userId);
+    
     if (!user) {
       console.log('User not found with ID:', userId); 
       return res.status(404).json({ message: 'User not found' });
     }
-    console.log('User found:', user); // Log the found user
 
-    // Convert availability strings back to Date objects if provided
+    console.log('User found:', user); 
+
     const availabilityDates = availability.map(dateString => new Date(dateString));
-    console.log('Converted availability dates:', availabilityDates); // Log converted dates
+    console.log('Converted availability dates:', availabilityDates);
 
-    // Check if profile exists, otherwise create a new one
     let profile = await Profile.findOne({ user: userId });
-    if (profile) {
-      console.log('Profile found, updating profile for user:', userId); // Log if profile is found
 
-      // Update existing profile
-      profile.fullName = fullName;
+    if (profile) {
+      console.log('Updating profile for user:', userId);
+
+      profile.firstName = firstName;
+      profile.lastName = lastName;
       profile.address1 = address1;
       profile.address2 = address2 || '';
       profile.city = city;
@@ -36,17 +38,19 @@ router.post('/', async (req, res) => {
       profile.preferences = preferences || '';
       profile.availability = availabilityDates;
 
-      // Save the updated profile
       const updatedProfile = await profile.save();
-      console.log('Profile updated successfully:', updatedProfile); // Log successful update
-      return res.status(200).json({ message: 'Profile updated successfully', profile: updatedProfile });
-    } else {
-      console.log('Profile not found, creating new profile for user:', userId); // Log if creating a new profile
+      console.log('Profile updated successfully:', updatedProfile);
 
-      // Create a new profile
+      return res.status(200).json({ message: 'Profile updated successfully', profile: updatedProfile });
+    } 
+    
+    else {
+      console.log('Creating new profile for user:', userId); // Log if creating a new profile
+
       const newProfile = new Profile({
         user: userId,
-        fullName,
+        firstName,
+        lastName,
         address1,
         address2,
         city,
@@ -58,17 +62,20 @@ router.post('/', async (req, res) => {
       });
 
       const savedProfile = await newProfile.save();
-      console.log('Profile created successfully:', savedProfile); // Log successful profile creation
+      console.log('Profile created successfully:', savedProfile);
+
       return res.status(201).json({ message: 'Profile created successfully', profile: savedProfile });
     }
-  } catch (error) {
+  } 
+  
+  catch (error) {
     console.error('Error creating/updating profile:', error); // Log any errors encountered
     return res.status(500).json({ message: 'Server error' });
   }
 });
 
 
-// Get Profile by user ID
+// get profile by id
 router.get('/:userId', async (req, res) => {
   const { userId } = req.params;
 
@@ -78,14 +85,17 @@ router.get('/:userId', async (req, res) => {
 
   try {
     const profile = await Profile.findOne({ user: userId });
+
     if (!profile) {
-      return res.status(404).json({ message: 'Profile not found' });
+      return res.status(404).json({ message: 'Profile not found.' });
     }
 
     return res.status(200).json(profile);
-  } catch (error) {
+  } 
+  
+  catch (error) {
     console.error('Error fetching profile:', error);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error.' });
   }
 });
 

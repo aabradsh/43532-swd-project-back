@@ -1,25 +1,26 @@
 const express = require('express');
 const router = express.Router();
-const User = require('.../models/User');
-const Profile = require('.../models/Profile');
+const User = require('../models/User');
+const Profile = require('../models/Profile');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 
 router.post('/', async (req, res) => {
-    const { name, email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
     try {
         // check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({ message: 'Email already in use' });
+            return res.status(400).json({ message: 'Email already in use.' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10); // hashing
 
         const newUser = new User({
-            name,
+            firstName,
+            lastName,
             email,
             password: hashedPassword
         });
@@ -28,9 +29,11 @@ router.post('/', async (req, res) => {
 
         console.log('User created successfully:', newUser);
 
-        const newProfile = new Profile({ // blank profile
-            user: newUser._id,
-            fullName: '',
+        // blank profile
+        const newProfile = new Profile({
+            user: newUser._id, 
+            firstName: '',
+            lastName: '',
             address1: '',
             address2: '',
             city: '',
@@ -49,13 +52,13 @@ router.post('/', async (req, res) => {
         });
 
         res.status(201).json({
-            message: 'User registered successfully',
+            message: 'User registered successfully!',
             token,
             userName: newUser.name,
-            userId: newUser._id // stored in frontend
+            userId: newUser._id
         });
     } catch (error) {
-        console.error('An error occurred.', error);
+        console.error('Error during registration:', error);
         return res.status(500).json({ message: 'Server error.' });
     }
 });
