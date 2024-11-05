@@ -4,15 +4,15 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 // const fs = require('fs');
-// const JWT_SECRET = "not-strong-secret";
+const JWT_SECRET = process.env.JWT_SECRET;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 // const path = require('path');
-// const NotificationsRoutes = require('./routes/NotificationsRoutes');
-// const VolunteerHistoryRoutes = require('./routes/VolunteerHistoryRoutes');
-// const VolunteerMatchingRoutes = require('./routes/VolunteerMatchingRoutes');
-// const EventManagementRoutes = require('./routes/EventManagementRoutes');
-const User = require('./models/User');
+const NotificationsRoutes = require('./routes/NotificationsRoutes');
+const VolunteerHistoryRoutes = require('./routes/VolunteerHistoryRoutes');
+const VolunteerMatchingRoutes = require('./routes/VolunteerMatchingRoutes');
+const EventManagementRoutes = require('./routes/EventManagementRoutes');
+const User = require('./models/User'); //needed to capitalize user.js to User.js
 const axios = require('axios');
 
 const app = express();
@@ -20,11 +20,12 @@ const PORT = 4000;
 
 
 app.use(express.json());
-app.use(cors({ 
-    origin: 'http://localhost:3000',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
-}));
+// app.use(cors({ 
+//     origin: 'http://localhost:3000',
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//     credentials: true
+// }));
+app.use(cors({ credentials: true })); //allow all cors requests
 
 
 // connect to mongodb
@@ -38,45 +39,45 @@ const RegisterRoutes = require('./routes/RegisterRoutes');
 const ProfileRoutes = require('./routes/ProfileRoutes');
 
 
+
+const authenticateJWT = (req, res, next) => {
+    //const token = req.header('Authorization').split(' ')[1]; // Bearer token
+    const authHeader = req.header('Authorization');
+    console.log('authenticate');
+    console.log("header:" + authHeader);
+    console.log(typeof authHeader);
+    if (!authHeader) {
+        return next();
+    }
+    const token = authHeader.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ message: 'Authentication failed' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        console.log(decoded);
+        req.user = decoded;
+        console.log("decoded: " + decoded);
+        next();
+    } catch (err) {
+        return res.status(401).json({ message: 'Invalid token' });
+    }
+};
+
+app.use(authenticateJWT);
+
+// Registering routes
 app.use('/login', LoginRoutes);
 app.use('/register', RegisterRoutes);
 app.use('/profile', ProfileRoutes);
-
+app.use('/api/volunteerHistory', VolunteerHistoryRoutes);
+app.use('/api/volunteer-matching', VolunteerMatchingRoutes);
+app.use('/api/eventmanagement', EventManagementRoutes);
+app.use('/api/notifications', NotificationsRoutes);  // This will handle all notification-related routes
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-// const authenticateJWT = (req, res, next) => {
-//     //const token = req.header('Authorization').split(' ')[1]; // Bearer token
-//     const authHeader = req.header('Authorization');
-// console.log('authenticate');
-//     console.log("header:" + authHeader);
-//     console.log(typeof authHeader);
-//     if(!authHeader) {
-//         return next();
-//     }
-//     const token = authHeader.split(' ')[1];
-
-//     if (!token) {
-//         return res.status(401).json({ message: 'Authentication failed' });
-//     }
-
-//     try {
-//         const decoded = jwt.verify(token, JWT_SECRET);
-//         console.log(decoded);
-//         req.user = decoded;
-//         console.log("decoded: " + decoded);
-//         next();
-//     } catch (err) {
-//         return res.status(401).json({ message: 'Invalid token' });
-//     }
-// };
-
-// app.use(authenticateJWT);
-
-// // Registering routes
-// app.use('/api/notifications', NotificationsRoutes);  // This will handle all notification-related routes
-// app.use('/api/volunteerHistory', VolunteerHistoryRoutes);
-// app.use('/api/volunteer-matching', VolunteerMatchingRoutes);
-// app.use('/api/eventmanagement', EventManagementRoutes);
 
 // // Port of our server
 // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
