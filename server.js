@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('./models/User');
 const axios = require('axios');
-
+const authenticateJWT = require('./middleware/authMiddleware');
 const app = express();
 const PORT = 4000;
 
@@ -33,6 +33,7 @@ const VolunteerHistoryRoutes = require('./routes/VolunteerHistoryRoutes');
 const VolunteerMatchingRoutes = require('./routes/VolunteerMatchingRoutes');
 const EventManagementRoutes = require('./routes/EventManagementRoutes');
 
+app.use(authenticateJWT);
 // Registering routes
 app.use('/login', LoginRoutes);
 app.use('/register', RegisterRoutes);
