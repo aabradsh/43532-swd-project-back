@@ -1,10 +1,11 @@
-const { Volunteer, Event } = require('../models/VolunteerMatching');
+const Event = require('../models/Event');
+const User = require('../models/User');
 const { createNotification } = require('./NotificationsController');
 
 // Function to get all volunteers from the database
 const getVolunteers = async (req, res) => {
   try {
-    const volunteers = await Volunteer.find();
+    const volunteers = await User.find();
     res.json(volunteers);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching volunteers' });
@@ -27,7 +28,7 @@ const matchVolunteersToEvents = async (req, res) => {
 
   try {
     // Find the volunteer by ID
-    const volunteer = await Volunteer.findById(volunteerId);
+    const volunteer = await User.findById(volunteerId);
     if (!volunteer) {
       return res.status(404).json({ message: 'Volunteer not found' });
     }

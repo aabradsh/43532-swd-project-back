@@ -6,6 +6,11 @@ const userSchema = new Schema({
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    skills: { type: [String], required: true },
+    location: { type: String, required: true },
+    availability: { type: String, required: true },
+    events: { type: [String] },
+    admin: {type: Boolean, default: false}
     
 });
 
