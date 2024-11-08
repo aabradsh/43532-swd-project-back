@@ -51,6 +51,9 @@ const matchVolunteersToEvents = async (req, res) => {
     const bestMatch = matchedEvents[0]?.matchScore > 0 ? matchedEvents[0] : null;
 
     if (bestMatch) {
+      // Add matched events to the user's events 
+      volunteer.events.push(bestMatch);
+      await volunteer.save();
       // Create a notification for the volunteer
       await createNotification(volunteer._id, `You have been matched to the event: ${bestMatch.name}`);
     }

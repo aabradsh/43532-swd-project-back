@@ -44,7 +44,7 @@ const showEvents = async (req, res) => {
     else {
         //Find events attended by volunteers
         const attendedEvents = events.filter(event =>
-        volunteer.events.includes(event.name));
+        volunteer.events.includes(event._id));
 
         // Send those events to the front end 
         res.json(attendedEvents);
