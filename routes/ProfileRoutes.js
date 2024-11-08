@@ -4,11 +4,13 @@ const Profile = require('../models/Profile');
 const User = require('../models/User');
 
 router.post('/', async (req, res) => {
-  const { firstName, lastName, address1, address2, city, state, zip, skills, preferences, availability } = req.body;
+  const { firstName, lastName, address1, address2, city, state, zip, skills, preferences, availability } = req.body.profile;
   const userId = req.user.userId; 
 
-  console.log(`Middleware user object: ${req.user}`)
-
+  console.log("Middleware user object:");
+  console.log(req.user);
+  console.log("Middleware user.userId:");
+  console.log(userId);
   console.log('Received profile update request:', req.body); 
 
   try {
