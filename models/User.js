@@ -7,8 +7,8 @@ const userSchema = new Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     skills: { type: [String], required: true },
-    location: { type: String, required: true },
-    availability: { type: String, required: true },
+    location: { type: String },
+    availability: { type: String },
     events: { type: [String] },
     admin: {type: Boolean, default: false}
     
