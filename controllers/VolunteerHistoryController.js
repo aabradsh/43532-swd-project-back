@@ -24,16 +24,17 @@ const getEvents = async (req, res) => {
 
 //Function to send the right events to the front end based on the user
 const showEvents = async (req, res) => {
-    const userId = req.query;
+    const userId = req.user.userId;
     try {
       // Find the volunteer by ID
-      const volunteer = await User.findById(req.params.userId);
+      const volunteer = await User.findById(userId);
       if (!volunteer) {
         return res.status(404).json({ message: 'Volunteer not found' });
       }
       if (!volunteer.events){
         return res.status(404).json({ message: 'No volunteer history yet!' });
     }
+    const events = await Event.find();
 
     //Check if the login is an admin
     if (volunteer.admin){

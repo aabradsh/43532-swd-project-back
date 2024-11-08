@@ -9,7 +9,7 @@ const userSchema = new Schema({
     skills: { type: [String], required: true },
     location: { type: String },
     availability: { type: String },
-    events: { type: [String] },
+    events: [{ type: Schema.Types.ObjectId, ref: 'Event' }],
     admin: {type: Boolean, default: false}
     
 });

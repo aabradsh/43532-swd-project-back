@@ -1,5 +1,6 @@
 const Event = require('../models/Event');
 const User = require('../models/User');
+const Profile = require('../models/Profile');
 const { createNotification } = require('./NotificationsController');
 
 // Function to get all volunteers from the database
@@ -32,13 +33,13 @@ const matchVolunteersToEvents = async (req, res) => {
     if (!volunteer) {
       return res.status(404).json({ message: 'Volunteer not found' });
     }
-
+    const volunteerProfile = await Profile.findOne({user: volunteerId});
     // Fetch all events from the database
     const events = await Event.find();
 
     // Calculate a similarity score based on matching skills
     const matchedEvents = events.map(event => {
-      const matchingSkills = event.requiredSkills.filter(skill => volunteer.skills.includes(skill));
+      const matchingSkills = event.requiredSkills.filter(skill => volunteerProfile.skills.includes(skill));
       return {
         ...event.toObject(), // Convert Mongoose document to a plain JavaScript object
         matchScore: matchingSkills.length // Number of matching skills
