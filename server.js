@@ -33,16 +33,19 @@ const NotificationsRoutes = require('./routes/NotificationsRoutes');
 const VolunteerHistoryRoutes = require('./routes/VolunteerHistoryRoutes');
 const VolunteerMatchingRoutes = require('./routes/VolunteerMatchingRoutes');
 const EventManagementRoutes = require('./routes/EventManagementRoutes');
+const ReportRoutes = require('./routes/ReportRoutes');
 
 app.use(authenticateJWT);
 // Registering routes
 app.use('/login', LoginRoutes);
 app.use('/register', RegisterRoutes);
 app.use('/profile', ProfileRoutes);
+app.use('/report', ReportRoutes);
 app.use('/api/notifications', NotificationsRoutes);
 app.use('/api/volunteerHistory', VolunteerHistoryRoutes);
 app.use('/api/volunteer-matching', VolunteerMatchingRoutes);
 app.use('/api/eventmanagement', EventManagementRoutes);
+
 
 // Start the server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
