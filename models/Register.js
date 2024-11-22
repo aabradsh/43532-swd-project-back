@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 
 
 router.post('/', async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, admin } = req.body;
 
     try {
         // check if user already exists
@@ -21,7 +21,8 @@ router.post('/', async (req, res) => {
         const newUser = new User({
             name,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            admin
         });
 
         await newUser.save();

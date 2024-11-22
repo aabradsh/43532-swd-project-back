@@ -6,6 +6,11 @@ const userSchema = new Schema({
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    skills: { type: [String], required: true },
+    location: { type: String },
+    availability: { type: String },
+    events: [{ type: Schema.Types.ObjectId, ref: 'Event' }],
+    admin: {type: Boolean, default: false}
     
 });
 

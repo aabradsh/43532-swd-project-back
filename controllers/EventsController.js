@@ -1,12 +1,21 @@
-const Event = require('../models/EventManagement');
+const Event = require('../models/Event');
 
 // Get all events
-const getAllEvents = (req, res) => {
-  console.log('get');
+// const getAllEvents = (req, res) => {
+//   console.log('get');
 
-  const events = Event.getAll();
-  console.log(events);
-  res.status(200).json(events);
+//   const events = Event.getAll();
+//   console.log(events);
+//   res.status(200).json(events);
+// };
+
+const getEvents = async (req, res) => {
+  try {
+    const events = await Event.find();
+    res.json(events);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching events' });
+  }
 };
 
 // Create a new event
@@ -34,4 +43,4 @@ const deleteEvent = (req, res) => {
   res.status(200).json({ message: 'Event deleted successfully' });
 };
 
-module.exports = { getAllEvents, createEvent, updateEvent, deleteEvent };
+module.exports = { getEvents, createEvent, updateEvent, deleteEvent };

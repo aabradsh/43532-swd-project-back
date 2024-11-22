@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const {getEvents} = require('../controllers/VolunteerHistoryController');
-
+const {showEvents} = require('../controllers/VolunteerHistoryController');
+const authenticateJWT = require('../middleware/authMiddleware');
 // Route to get all appropriate events
-router.get('/events', getEvents);
+
+router.get('/show', authenticateJWT, showEvents);
 
 module.exports = router;

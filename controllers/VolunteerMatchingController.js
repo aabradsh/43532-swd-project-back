@@ -1,10 +1,12 @@
-const { Volunteer, Event } = require('../models/VolunteerMatching');
+const Event = require('../models/Event');
+const User = require('../models/User');
+const Profile = require('../models/Profile');
 const { createNotification } = require('./NotificationsController');
 
 // Function to get all volunteers from the database
 const getVolunteers = async (req, res) => {
   try {
-    const volunteers = await Volunteer.find();
+    const volunteers = await User.find();
     res.json(volunteers);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching volunteers' });
@@ -27,17 +29,17 @@ const matchVolunteersToEvents = async (req, res) => {
 
   try {
     // Find the volunteer by ID
-    const volunteer = await Volunteer.findById(volunteerId);
+    const volunteer = await User.findById(volunteerId);
     if (!volunteer) {
       return res.status(404).json({ message: 'Volunteer not found' });
     }
-
+    const volunteerProfile = await Profile.findOne({user: volunteerId});
     // Fetch all events from the database
     const events = await Event.find();
 
     // Calculate a similarity score based on matching skills
     const matchedEvents = events.map(event => {
-      const matchingSkills = event.requiredSkills.filter(skill => volunteer.skills.includes(skill));
+      const matchingSkills = event.requiredSkills.filter(skill => volunteerProfile.skills.includes(skill));
       return {
         ...event.toObject(), // Convert Mongoose document to a plain JavaScript object
         matchScore: matchingSkills.length // Number of matching skills
@@ -49,6 +51,9 @@ const matchVolunteersToEvents = async (req, res) => {
     const bestMatch = matchedEvents[0]?.matchScore > 0 ? matchedEvents[0] : null;
 
     if (bestMatch) {
+      // Add matched events to the user's events 
+      volunteer.events.push(bestMatch);
+      await volunteer.save();
       // Create a notification for the volunteer
       await createNotification(volunteer._id, `You have been matched to the event: ${bestMatch.name}`);
     }
