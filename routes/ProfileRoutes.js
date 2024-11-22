@@ -45,7 +45,7 @@ router.post('/', async (req, res) => {
     } 
     
     else {
-      console.log('Creating new profile for user:', userId); // Log if creating a new profile
+      console.log('Creating new profile for user:', userId); 
 
       const newProfile = new Profile({
         user: userId,
@@ -69,7 +69,7 @@ router.post('/', async (req, res) => {
   } 
   
   catch (error) {
-    console.error('Error creating/updating profile:', error);
+    console.error('Error updating profile:', error);
     return res.status(500).json({ message: 'Server error.' });
   }
 });
