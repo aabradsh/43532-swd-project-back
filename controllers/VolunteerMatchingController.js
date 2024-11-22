@@ -23,6 +23,36 @@ const getEvents = async (req, res) => {
   }
 };
 
+const accessVolunteerMatching = async (req, res) => {
+  try {
+    const userId = req.user.userId; // Ensure JWT contains userId
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check if the user is an admin
+    if (user.admin) {
+      // If admin, return all volunteers and events
+      const volunteers = await User.find(); // Fetch all volunteers
+      const events = await Event.find(); // Fetch all events
+      res.status(200).json({
+        message: 'Access granted to Volunteer Matching',
+        isAdmin: true,
+        volunteers,
+        events,
+      });
+    } else {
+      // If not admin, return an error
+      res.status(403).json({ message: 'Error: Need to be admin to access Volunteer Matching.' });
+    }
+  } catch (error) {
+    console.error('Error verifying access to Volunteer Matching:', error);
+    res.status(500).json({ message: 'Server error verifying access to Volunteer Matching' });
+  }
+};
+
 // Function to match volunteers to events based on skills and location
 const matchVolunteersToEvents = async (req, res) => {
   const { volunteerId } = req.query;
@@ -67,5 +97,6 @@ const matchVolunteersToEvents = async (req, res) => {
 module.exports = {
   getVolunteers,
   getEvents,
+  accessVolunteerMatching,
   matchVolunteersToEvents
 };
