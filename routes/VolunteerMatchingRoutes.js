@@ -3,9 +3,12 @@ const router = express.Router();
 const {
   getVolunteers,
   getEvents,
+  accessVolunteerMatching,
   matchVolunteersToEvents
 } = require('../controllers/VolunteerMatchingController');
 const authenticateJWT = require('../middleware/authMiddleware');
+
+router.get('/access', authenticateJWT, accessVolunteerMatching);
 
 router.get('/volunteers', authenticateJWT, getVolunteers);
 
