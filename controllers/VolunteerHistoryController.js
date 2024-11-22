@@ -21,6 +21,24 @@ const getEvents = async (req, res) => {
       res.status(500).json({ message: 'Error fetching events' });
     }
   };
+const isVolunteerAdmin = async (req, res) => {
+  const userId = req.user.userId;
+  try {
+    // Find the volunteer by ID
+    const volunteer = await User.findById(userId);
+    if (!volunteer) {
+      return res.status(404).json({ message: 'Volunteer not found' });
+    }
+  //Check if the login is an admin
+  console.log(volunteer);
+  res.json(volunteer.admin);
+  console.log(volunteer.admin);
+}
+  catch (error) {
+    console.error('Error finding if volunteer admin', error); // Log any errors encountered
+    res.status(500).json({ message: 'Error displaying events' });
+  }
+};
 
 //Function to send the right events to the front end based on the user
 const showEvents = async (req, res) => {
@@ -58,5 +76,6 @@ const showEvents = async (req, res) => {
 module.exports = {
     getVolunteers,
     getEvents,
-    showEvents
+    showEvents,
+    isVolunteerAdmin
   };

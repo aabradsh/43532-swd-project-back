@@ -11,6 +11,7 @@ const authenticateJWT = (req, res, next) => {
 
   const token = authHeader.split(' ')[1];
   if (!token) {
+    console.log("Token missing?");
     return res.status(401).json({ message: 'Authentication token missing' });
   }
 
@@ -19,6 +20,7 @@ const authenticateJWT = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
+    console.log("Invalid token?");
     res.status(401).json({ message: 'Invalid token' });
   }
 };
